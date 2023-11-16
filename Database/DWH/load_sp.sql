@@ -1,7 +1,6 @@
 USE DW;
 EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL';
 
-
 -- EMPTY AND REFILL dim_date
 DELETE FROM DimDate;
 EXEC fill_dim_date;
@@ -20,4 +19,5 @@ EXEC fill_dim_email;
 
 
 -- ADD TO fact_account
+DELETE FROM FactCampagne;
 EXEC fill_fact_campagne;
