@@ -1,5 +1,5 @@
-CREATE DATABASE DEP2;
-USE DEP2;
+-- CREATE DATABASE DEP2;
+-- USE DEP2;
 
 -- Account Table
 CREATE TABLE Account (
@@ -31,10 +31,10 @@ CREATE TABLE Persoon (
 
 -- Table: Contact
 CREATE TABLE Contactfiche (
-    Persoon_ID VARCHAR(255),
     Contactfiche_ID VARCHAR(255) PRIMARY KEY,
-    Account_ID VARCHAR(255), -- FK
+    Account_ID VARCHAR(255),
     Functie_title VARCHAR(255),
+    Persoon_ID VARCHAR(255),
     Status VARCHAR(255),
     Voka_medewerker INTEGER,
     FOREIGN KEY (Persoon_ID) REFERENCES Persoon(Persoon_ID),
@@ -50,11 +50,12 @@ CREATE TABLE Activiteitscode (
 
 -- Account ActiviteitsCode Table
 CREATE TABLE Account_ActiviteitsCode (
-    Activiteits_Code VARCHAR(255) PRIMARY KEY,
+    Activiteits_Code VARCHAR(255),
     Activiteitscode_ID VARCHAR(255),
     inf_account_inf_activiteitscodeId VARCHAR(255),
     FOREIGN KEY (Activiteits_Code) REFERENCES Account(Account_ID),
-    FOREIGN KEY (Activiteitscode_ID) REFERENCES Activiteitscode(Activiteitscode_ID)
+    FOREIGN KEY (Activiteitscode_ID) REFERENCES Activiteitscode(Activiteitscode_ID),
+    PRIMARY KEY(Activiteits_Code, Activiteitscode_ID)
 );
 
 
@@ -71,10 +72,11 @@ CREATE TABLE Account_Financiele_Data (
 );
 
 CREATE TABLE Activiteit_Vereist_Contact (
-    Activity_ID VARCHAR(255) PRIMARY KEY,
+    Activity_ID VARCHAR(255) ,
     ReqAttendee VARCHAR(255),
     FOREIGN KEY (Activity_ID) REFERENCES Activiteitscode(Activiteitscode_ID),
-    FOREIGN KEY (ReqAttendee) REFERENCES Contactfiche(Contactfiche_ID)
+    FOREIGN KEY (ReqAttendee) REFERENCES Contactfiche(Contactfiche_ID),
+    PRIMARY KEY(Activity_ID, ReqAttendee)
 );
 
 -- Table: Afpsraak Alle
@@ -156,28 +158,28 @@ CREATE TABLE CDI_Mailing (
 
 -- Table: cdi pageviews
 CREATE TABLE CDI_PageView (
-    PageView_ID VARCHAR(500) PRIMARY KEY,
     Browser VARCHAR(50),
     Campagne_ID VARCHAR(255),
     Contact_ID VARCHAR(255),
     Duration VARCHAR(255),
     Operating_System VARCHAR(50),
+    PageView_ID VARCHAR(500) PRIMARY KEY,
     Referrer_Type VARCHAR(255),
     PageView_Time DateTime,
     Title VARCHAR(255),
     Type VARCHAR(255),
-    Url VARCHAR(255),
-    Viewed_On DATE,
-    Visit DATE,
+    Viewed_On DATETIME, 
+    Visit VARCHAR(255),
     Visitor_key VARCHAR(255),
-    Web_Content VARCHAR(255),
-    Made_On DATE,
-    Edited_By VARCHAR(255),
-    Edited_On DATE,
+    Made_On DATETIME, --
+    Edited_By VARCHAR(255), -- fk
+    Edited_On DATETIME, 
     Status VARCHAR(255),
     Status_Reason VARCHAR(255),
+    -- FOREIGN KEY (Edited_By) REFERENCES Persoon(Persoon_ID),
     FOREIGN KEY (Campagne_ID) REFERENCES Campagne(Campagne_ID),
-    FOREIGN KEY (Contact_ID) REFERENCES Contactfiche(Contactfiche_ID)
+    FOREIGN KEY (Contact_ID) REFERENCES Contactfiche(Contactfiche_ID),
+    -- FOREIGN KEY (Visit) REFERENCES CDI_Visits(Visit_ID)
 );
 
 -- Table: cdi web content
@@ -196,41 +198,31 @@ CREATE TABLE CDI_Web_Content (
 );
 
 -- Table: cdi visits
+
 CREATE TABLE CDI_Visits (
-    Adobe_Reader VARCHAR(255),
-    Bounce VARCHAR(255),
-    Browser VARCHAR(255),
     Campagne_ID VARCHAR(255),
     IP_Stad VARCHAR(255),
-    IP_Company VARCHAR(255),
     Contactfiche_ID VARCHAR(255),
     Contact_Naam VARCHAR(255),
-    Social_Profile VARCHAR(255),
     IP_Land VARCHAR(255),
     Duration VARCHAR(255),
     Email_Send VARCHAR(255),
-    Ended_On VARCHAR(255),
-    Entry_page VARCHAR(2500),
-    Exit_page VARCHAR(2500),
+    Ended_On VARCHAR(255), --datetime
     First_Visit VARCHAR(255),
     IP_Adress VARCHAR(255),
     IP_Organization VARCHAR(255),
-    Keywords VARCHAR(255),
     IP_Latitude VARCHAR(255),
     IP_Longitude VARCHAR(255),
     Operating_System VARCHAR(255),
     IP_Postcode VARCHAR(255),
-    Referrer VARCHAR(500),
-    Referring_Host VARCHAR(255),
     Score VARCHAR(255),
     Referrer_Type VARCHAR(255),
-    Started_On VARCHAR(255),
+    Started_On DATETIME,
     IP_Status VARCHAR(255),
-    Visit_Time VARCHAR(255),
-    Total_Pages VARCHAR(255),
+    Visit_Time DATETIME,
     Visit_ID VARCHAR(255) PRIMARY KEY,
-    Aangemaakt_op VARCHAR(255),
-    Gewijzigd_op VARCHAR(255),
+    Aangemaakt_op DATETIME,
+    Gewijzigd_op DATETIME,
     FOREIGN KEY (Campagne_ID) REFERENCES Campagne(Campagne_ID),
     FOREIGN KEY (Contactfiche_ID) REFERENCES Contactfiche(Contactfiche_ID),
     FOREIGN KEY (Email_send) REFERENCES CDI_Mailing(Mailing_ID)
@@ -238,12 +230,13 @@ CREATE TABLE CDI_Visits (
 
 -- Table: cdi sent email clicks
 CREATE TABLE CDI_Sent_Email_Clicks (
-    SentEmailClicks_ID VARCHAR(255) PRIMARY KEY,
+    SentEmailClicks VARCHAR(255),
     Contactfiche_ID VARCHAR(255),
     Email_versturen VARCHAR(255),
     Sent_Email VARCHAR(255),
     FOREIGN KEY (Contactfiche_ID) REFERENCES Contactfiche(Contactfiche_ID),
-    FOREIGN KEY (Email_versturen) REFERENCES CDI_Mailing(Mailing_ID)
+    FOREIGN KEY (Email_versturen) REFERENCES CDI_Mailing(Mailing_ID),
+    PRIMARY KEY(Sent_Email, Contactfiche_ID)
 );
 
 -- Table: Functie
@@ -294,42 +287,43 @@ CREATE TABLE Inschrijving (
 
 
 -- Table: Lidmaatschap
+drop table Lidmaatschap
 CREATE TABLE Lidmaatschap (
+    Opzeg VARCHAR(255),
     Lidmaatschap_ID VARCHAR(255) PRIMARY KEY,
     Onderneming_ID VARCHAR(255),
-    Opzeg VARCHAR(255),
     Reden_Aangroei VARCHAR(255),
     Reden_Verloop VARCHAR(255),
-    Start_Datum VARCHAR(255),
+    Start_Datum DATE,
     FOREIGN KEY (Onderneming_ID) REFERENCES Account(Account_ID)
 );
 
 
 -- Table: Sessie
+EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL';
+drop table sessie
 CREATE TABLE Sessie (
-    Sessie_ID VARCHAR(255) PRIMARY KEY,
+    Activiteitstype VARCHAR(255), 
     Campagne_ID VARCHAR(255),
-    Activiteitstype VARCHAR(255),
-    Campagne_ID VARCHAR(255), 
-    Einddatum VARCHAR(255),
+    Einddatum DATETIME,
     Product VARCHAR(255),
+    Sessie_ID VARCHAR(255) PRIMARY KEY,
     Sessie_nr VARCHAR(255),
-    Startdatum VARCHAR(255),
+    Startdatum DATETIME,
     Thema VARCHAR(255), 
     FOREIGN KEY (Campagne_ID) REFERENCES Campagne(Campagne_ID)
-
 );
 
 
 
 -- Table: Sessie inschrijving
+drop table SessieInschrijving
 CREATE TABLE SessieInschrijving (
     SessieInschrijving_ID VARCHAR(255) PRIMARY KEY,
     Sessie_ID VARCHAR(255),
     Inschrijving_ID VARCHAR(255),
     FOREIGN KEY (Sessie_ID) REFERENCES Sessie(Sessie_ID),
     FOREIGN KEY (Inschrijving_ID) REFERENCES Inschrijving(Inschrijving_ID)
-    
 );
 
 
