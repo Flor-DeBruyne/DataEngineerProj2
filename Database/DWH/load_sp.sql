@@ -21,3 +21,4 @@ EXEC fill_dim_email;
 -- ADD TO fact_account
 DELETE FROM FactCampagne;
 EXEC fill_fact_campagne;
+

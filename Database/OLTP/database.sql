@@ -137,11 +137,11 @@ CREATE TABLE Afspraak_Vereist_Contact (
 CREATE TABLE Campagne (
     Campagne_ID VARCHAR(255) PRIMARY KEY,
     Campagne_Nr VARCHAR(255),
-    Einddatum VARCHAR(255),
+    Einddatum DATE,
     Naam VARCHAR(255),
     Naam_in_email VARCHAR(255),
     Reden_van_status VARCHAR(255),
-    Startdatum VARCHAR(255),
+    Startdatum DATE,
     Status_Camp VARCHAR(255),
     Type_campagne VARCHAR(255),
     URL_voka_be VARCHAR(255),
@@ -198,7 +198,6 @@ CREATE TABLE CDI_Web_Content (
 );
 
 -- Table: cdi visits
-
 CREATE TABLE CDI_Visits (
     Campagne_ID VARCHAR(255),
     IP_Stad VARCHAR(255),
@@ -278,11 +277,13 @@ CREATE TABLE Inschrijving (
     Status VARCHAR(255), -- Aanwezig/Afwezig
     Bron VARCHAR(255),
     Contactfiche_ID VARCHAR(255),
-    Datum DateTime,
+    Datum DATE,
     Inschrijving_ID VARCHAR(255) PRIMARY KEY,
-    Facturatie_bedrag INTEGER,
+    Facturatie_bedrag VARCHAR(255),
+    Campagne_ID VARCHAR(255),
+    Campagne_naam VARCHAR(255),
     FOREIGN KEY (Contactfiche_ID) REFERENCES Contactfiche(Contactfiche_ID),
-    FOREIGN KEY (Bron) REFERENCES Campagne(Campagne_ID)
+    FOREIGN KEY (Campagne_ID) REFERENCES Campagne(Campagne_ID)
 );
 
 
@@ -300,8 +301,6 @@ CREATE TABLE Lidmaatschap (
 
 
 -- Table: Sessie
-EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL';
-drop table sessie
 CREATE TABLE Sessie (
     Activiteitstype VARCHAR(255), 
     Campagne_ID VARCHAR(255),
@@ -317,7 +316,6 @@ CREATE TABLE Sessie (
 
 
 -- Table: Sessie inschrijving
-drop table SessieInschrijving
 CREATE TABLE SessieInschrijving (
     SessieInschrijving_ID VARCHAR(255) PRIMARY KEY,
     Sessie_ID VARCHAR(255),

@@ -1,13 +1,18 @@
--- Populate DimDate table with dates
-DECLARE @StartDate DATE = '2022-01-01';
+USE DW;
+DROP PROCEDURE IF EXISTS fill_dim_date;
+GO
+CREATE PROCEDURE fill_dim_date
+AS
+
+DECLARE @StartDate DATE = '2018-01-01';
 DECLARE @EndDate DATE = '2023-12-31';
 DECLARE @CurrentDate DATE = @StartDate;
-
 
 -- Loop to insert dates into DimDate
 WHILE @CurrentDate <= @EndDate
 BEGIN
     INSERT INTO DimDate (
+        date_key,
         date,
         day_num,
         day_of_year,
@@ -32,6 +37,7 @@ BEGIN
         is_weekday
     )
     VALUES (
+        CONVERT(INT, FORMAT(@CurrentDate, 'yyyyMMdd')),
         @CurrentDate,
         DATEPART(DAY, @CurrentDate),
         DATEPART(DAYOFYEAR, @CurrentDate),

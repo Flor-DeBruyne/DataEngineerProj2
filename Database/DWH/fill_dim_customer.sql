@@ -23,7 +23,7 @@ BEGIN
         Adres_Land = ra.Adres_Land,
         Persoon_ID = rp.Persoon_ID,
         Persoonnr = rp.Persoonnr,
-        Status_Persoon = rp.Reden_Status,
+        -- Status_Persoon = rp.Reden_Status,
         Marketing_Communicatie = rp.Marketing_Communicatie,
         Lidmaatschap_ID = rl.Lidmaatschap_ID,
         Opzeg = rl.Opzeg,
@@ -39,10 +39,10 @@ BEGIN
     INSERT INTO DW.dbo.DimCustomer
     (Customer_ID, Geografische_regio, Geografische_subregio, Plaats, Postcode,  Industriezone_Naam_, Is_Voka_entiteit,
     Ondernemingsaard, Ondernemingstype, Oprichtingsdatum, Primaire_activiteit, Reden_van_status, Status, Voka_Nr_,
-    Adres_Land, Persoon_ID, Persoonnr, Status_Persoon, Marketing_Communicatie, Lidmaatschap_ID, Opzeg, Reden_Aangroei, Reden_Verloop, Start_Datum)
+    Adres_Land, Persoon_ID, Persoonnr, Marketing_Communicatie, Lidmaatschap_ID, Opzeg, Reden_Aangroei, Reden_Verloop, Start_Datum)
     SELECT DISTINCT ra.Account_ID, ra.Adres_Geografische_regio, ra.Adres_Geografische_subregio, ra.Plaats, ra.Postcode,  ra.Industriezone_Naam_,
     ra.Is_Voka_entiteit, ra.Ondernemingsaard, ra.Ondernemingstype, ra.Oprichtingsdatum, ra.Primaire_activiteit, ra.Reden_van_status, 
-    ra.Status, ra.Voka_Nr_, ra.Adres_Land, rp.Persoon_ID, rp.Persoonnr, rp.Reden_Status, rp.Marketing_Communicatie, rl.Lidmaatschap_ID, rl.Opzeg,
+    ra.Status, ra.Voka_Nr_, ra.Adres_Land, rp.Persoon_ID, rp.Persoonnr, rp.Marketing_Communicatie, rl.Lidmaatschap_ID, rl.Opzeg,
     rl.Reden_Aangroei, rl.Reden_Verloop, rl.Start_Datum
     FROM DEP2.dbo.Account ra 
     JOIN DEP2.dbo.Contactfiche rc ON ra.Account_ID = rc.Account_ID
