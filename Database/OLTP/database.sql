@@ -137,11 +137,11 @@ CREATE TABLE Afspraak_Vereist_Contact (
 CREATE TABLE Campagne (
     Campagne_ID VARCHAR(255) PRIMARY KEY,
     Campagne_Nr VARCHAR(255),
-    Einddatum DATE,
+    Einddatum DATETIME,
     Naam VARCHAR(255),
     Naam_in_email VARCHAR(255),
     Reden_van_status VARCHAR(255),
-    Startdatum DATE,
+    Startdatum DATETIME,
     Status_Camp VARCHAR(255),
     Type_campagne VARCHAR(255),
     URL_voka_be VARCHAR(255),

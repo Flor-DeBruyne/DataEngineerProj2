@@ -5,17 +5,17 @@ from sqlalchemy import create_engine, MetaData
 
 load_dotenv()
 
-csv_dir = '' #path waar de data csv files staan
-SERVER = os.environ.get('SERVER')
+csv_dir =  '/home/flor/Workspace/DEP2/DataEngineerProj2/Data' #path waar de data csv files staan
+SERVER = os.environ.get('SERVER') 
 DATABASE = os.environ.get('DATABASE')
-UID = os.environ.get('USER')
-PWD = os.environ.get('PASSWORD')
+UID = os.environ.get('USER') 
+PWD = os.environ.get('PASSWORD') 
 
 
 
 table_file = {
     'Account' : 'Account.csv',
-    'Persoon' : 'Persoon.csv',
+    'Persoon' : 'Persoon.csv', 
     'Contactfiche' : 'Contact.csv',
     'Activiteitscode' : 'Activiteitscode.csv',
     'Account_ActiviteitsCode' : 'Account activiteitscode.csv',   
@@ -27,19 +27,19 @@ table_file = {
     'Afspraak_Betreft_Account' : 'Afspraak betreft account_cleaned.csv',
     'Campagne' : 'Campagne.csv',
     'CDI_Mailing' : 'CDI mailing.csv',
-    'CDI_PageView' : 'cdi pageviews.csv',
+    'CDI_PageView' : 'cdi pageviews.csv', # NOT DONE
     'CDI_Web_Content' : 'CDI web content.csv', 
-    'CDI_Visits' : 'CDI visits.csv',
-    'CDI_Sent_Email_Clicks' : 'CDI sent email clicks.csv', 
+    'CDI_Visits' : 'CDI visits.csv', # NOT DONE
+    'CDI_Sent_Email_Clicks' : 'CDI sent email clicks.csv',# NOT DONE 
     'Functie' : 'Functie.csv',
     'ContactFunctie' : 'Contact functie.csv', 
     'Gebruiker' : 'Gebruikers.csv',
     'Info_en_Klachten' : 'Info en klachten.csv',
-    'Inschrijving' : 'Inschrijving.csv',
+    'Inschrijving' : 'Inschrijving.csv', # NOT DONE
     'Lidmaatschap' : 'Lidmaatschap.csv',
     'Sessie' : 'Sessie.csv',
-    'SessieInschrijving': 'Sessie inschrijving.csv'
-} # AFSPRAAK VEREIST CONTACT
+    'SessieInschrijving': 'Sessie inschrijving.csv' # NOT DONE
+}
 
 try:
     connection_string = f'mssql+pyodbc://{UID}:{PWD}@{SERVER}/{DATABASE}?driver=ODBC+Driver+17+for+SQL+Server'
@@ -62,7 +62,7 @@ try:
 
         df.to_sql(table_name, con=engine, schema='dbo', if_exists='append', index=False)
         print(f"{table_name} done")
-    print("Done")
+    print("Uploading compleet")
 
 except Exception as e:
     print(f"Error: {str(e)}")

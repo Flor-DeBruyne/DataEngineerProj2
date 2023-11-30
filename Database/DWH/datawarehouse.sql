@@ -6,7 +6,7 @@
 DROP TABLE IF EXISTS DimDate;
 CREATE TABLE DimDate (
     date_Key INT NOT NULL PRIMARY KEY,
-    date DATE DEFAULT NULL,
+    date DATETIME DEFAULT NULL,
     day_num INT DEFAULT NULL,
     day_of_year INT DEFAULT NULL,
     day_of_week INT DEFAULT NULL,
@@ -115,6 +115,7 @@ CREATE TABLE FactCampagne (
     Status_Camp VARCHAR(255),
     Type_campagne VARCHAR(255),
     Soort_Campagne VARCHAR(255),
+    -- Duration DATETIME,
     FOREIGN KEY (Mailing_ID, Visit_ID) REFERENCES DimEmail(Mailing_ID, Visit_ID),
     FOREIGN KEY (Customer_ID, Persoon_ID) REFERENCES DimCustomer(Customer_ID, Persoon_ID),
     FOREIGN KEY (Contact_ID, Inschrijving_ID) REFERENCES DimContact(Contact_ID, Inschrijving_ID),

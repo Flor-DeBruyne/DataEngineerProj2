@@ -38,8 +38,8 @@ BEGIN
     JOIN DW.dbo.DimEmail re ON rca.Campagne_ID = re.Campagne_ID
     JOIN DW.dbo.DimContact rc ON  re.Contact_ID = rc.Contact_ID
     JOIN DW.dbo.DimCustomer rcu ON rc.Persoon_ID = rcu.Persoon_ID
-    JOIN DW.dbo.DimDate de ON rca.Einddatum = de.date
-    JOIN DW.dbo.DimDate ds ON rca.Startdatum = ds.date
+    JOIN DW.dbo.DimDate de ON CONVERT(INT, FORMAT(rca.Einddatum, 'yyyyMMdd')) = de.date_key
+    JOIN DW.dbo.DimDate ds ON CONVERT(INT, FORMAT(rca.Startdatum, 'yyyyMMdd')) = ds.date_key
     WHERE rca.Campagne_ID is not null;
 
     
