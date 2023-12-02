@@ -2,11 +2,13 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
+## Defining API paths
 root_path = '/'
 epic3_path = '/epic3/{contact_id}'
 epic4_path = '/epic4/{contact_id}'
 epic5_path = '/epic5/{campagne_id}'
 
+## Defining requests handlers
 @app.get('/')
 async def root():
     return {

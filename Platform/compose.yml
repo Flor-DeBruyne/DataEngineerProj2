@@ -1,6 +1,14 @@
 services:
+  ssh-tunnel:
+    build:
+      context: ./SSH
+    ports:
+      - "1438:1438"
+
   api:
-    build: .
+    build:
+      context: ./API
+    depends_on:
+      - ssh-tunnel
     ports:
       - "8000:8000"
-
