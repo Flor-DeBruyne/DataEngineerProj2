@@ -2,9 +2,10 @@ FROM python:3
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir --upgrade "fastapi[all]"
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-COPY main.py .
+COPY epic4.py main.py .
 
 EXPOSE 8000
 
