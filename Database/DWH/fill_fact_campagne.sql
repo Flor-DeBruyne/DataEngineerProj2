@@ -15,7 +15,7 @@ BEGIN
         Campagne_ID =  rca.Campagne_ID,
         Campagne_Nr = rca.Campagne_Nr,
         Eind_date_key = rd.[date_Key],
-        Naam = rca.Naam,
+        Naam_Campagne = rca.Naam,
         Naam_in_email = rca.Naam_in_email,
         Reden_van_status = rca.Reden_van_status,
         Start_date_key = rd.[date_Key],
@@ -30,7 +30,7 @@ BEGIN
     LEFT JOIN DW.dbo.DimDate rd ON dwh.Eind_date_key = rd.date_key;
 
     INSERT INTO DW.dbo.FactCampagne
-    (Customer_ID, Persoon_ID, Contact_ID, Inschrijving_ID, Mailing_ID, Visit_ID,Campagne_ID, Campagne_Nr, Eind_date_key, Naam, Naam_in_email, Reden_van_status,
+    (Customer_ID, Persoon_ID, Contact_ID, Inschrijving_ID, Mailing_ID, Visit_ID,Campagne_ID, Campagne_Nr, Eind_date_key, Naam_Campagne, Naam_in_email, Reden_van_status,
     Start_date_key, Status_Camp, Type_campagne, Soort_Campagne)
     SELECT DISTINCT rcu.Customer_ID, rcu.Persoon_ID, rc.Contact_ID, rc.Inschrijving_ID, re.Mailing_ID, re.Visit_ID, rca.Campagne_ID, rca.Campagne_Nr, de.date_Key, rca.Naam,
     rca.Naam_in_email, rca.Reden_van_status, ds.date_key, rca.Status_Camp, rca.Type_campagne, rca.Soort_Campagne

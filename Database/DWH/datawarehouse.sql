@@ -108,7 +108,7 @@ CREATE TABLE FactCampagne (
     Visit_ID VARCHAR(255),
     Campagne_Nr VARCHAR(255),
     Eind_date_key INT,
-    Naam VARCHAR(255),
+    Naam_Campagne VARCHAR(255),
     Naam_in_email VARCHAR(255),
     Reden_van_status VARCHAR(255),
     Start_date_key INT,
