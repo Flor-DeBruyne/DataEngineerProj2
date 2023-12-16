@@ -115,7 +115,7 @@ CREATE TABLE FactCampagne (
     Status_Camp VARCHAR(255),
     Type_campagne VARCHAR(255),
     Soort_Campagne VARCHAR(255),
-    -- Duration DATETIME,
+    Onderwerp_campagne VARCHAR(255),
     FOREIGN KEY (Mailing_ID, Visit_ID) REFERENCES DimEmail(Mailing_ID, Visit_ID),
     FOREIGN KEY (Customer_ID, Persoon_ID) REFERENCES DimCustomer(Customer_ID, Persoon_ID),
     FOREIGN KEY (Contact_ID, Inschrijving_ID) REFERENCES DimContact(Contact_ID, Inschrijving_ID),

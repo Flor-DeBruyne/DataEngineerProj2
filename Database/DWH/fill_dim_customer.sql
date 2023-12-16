@@ -23,7 +23,7 @@ BEGIN
         Adres_Land = ra.Adres_Land,
         Persoon_ID = rp.Persoon_ID,
         Persoonnr = rp.Persoonnr,
-        -- Status_Persoon = rp.Reden_Status,
+        Status_Persoon = rp.Status_Persoon,
         Marketing_Communicatie = rp.Marketing_Communicatie,
         Lidmaatschap_ID = rl.Lidmaatschap_ID,
         Opzeg = rl.Opzeg,
