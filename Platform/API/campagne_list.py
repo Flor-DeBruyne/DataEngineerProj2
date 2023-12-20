@@ -18,7 +18,7 @@ engine = create_engine(connection_string)
 metadata = MetaData()
 metadata.reflect(engine)
 
-def generate_contact_list(contact_id, after_date, amount : int):
+def generate_campagne_list(contact_id, after_date, amount : int):
     df_fact = pd.read_sql_table(table_name='FactCampagne', con=engine)
     df_mail = pd.read_sql_table(table_name='DimEmail', con=engine)
     df_cont = pd.read_sql_table(table_name='DimContact', con=engine)
@@ -90,21 +90,21 @@ def generate_contact_list(contact_id, after_date, amount : int):
 
     print(df_input["Start_date_campagne"].value_counts())
 
-    contact_proba = rfc.predict_proba(df_input[input_para])
+    campagne_proba = rfc.predict_proba(df_input[input_para])
 
 
-    contacts = pd.DataFrame({
-        'campaign': df_input["Naam_contact"].values,
-        'probas' : contact_proba[:, 0]
+    campagnes = pd.DataFrame({
+        'campaign': df_input["Naam_Campagne"].values,
+        'probas' : campagne_proba[:, 0]
     })
 
-    contacts_sorted = contacts.sort_values("probas", ascending=False)
+    campagnes_sorted = campagnes.sort_values("probas", ascending=False)
 
-    return contacts_sorted[:amount]
+    return campagnes_sorted[:amount]
 
 
 # if __name__ == "__main__":
-#     generate_contact_list("C5A58825-B2FE-E811-80F9-001DD8B72B61",'2023-03-27', 5)
+#     generate_campagne_list("C5A58825-B2FE-E811-80F9-001DD8B72B61",'2023-03-27', 5)
 
     
 
