@@ -9,10 +9,10 @@ services:
     build:
       context: ./API
     environment:
-      - SERVER = '127.0.0.1,1438'
-      - DATABASE = 'DEP2'
-      - USER = 'sa'
-      - PASSWORD = 'Admin123'
+      - SERVER='127.0.0.1,1438'
+      - DATABASE='DWH'
+      - USER='sa'
+      - PASSWORD='Admin123'
     depends_on:
       - ssh-tunnel
     ports:
