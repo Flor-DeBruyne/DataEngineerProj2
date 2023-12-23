@@ -20,6 +20,7 @@ RUN mkdir -p /etc/apt/keyrings \
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
+COPY campagne_rfc.joblib /app/Analyse/campagne_rfc.joblib
 COPY result_lists.py .
 
 EXPOSE 8000
