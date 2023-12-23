@@ -2,17 +2,19 @@ services:
   ssh-tunnel:
     build:
       context: ./SSH
+    container_name: platform-ssh-tunnel-1
     ports:
       - "1438:1438"
 
   api:
     build:
       context: ./API
+    container_name: platform-api-1
     environment:
-      - SERVER='127.0.0.1,1438'
-      - DATABASE='DWH'
-      - USER='sa'
-      - PASSWORD='Admin123'
+      - SERVER=platform-ssh-tunnel-1,1438
+      - DATAWAREHOUSE=DW
+      - USER=sa
+      - PASSWORD=Admin123
     depends_on:
       - ssh-tunnel
     ports:

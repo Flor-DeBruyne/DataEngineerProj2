@@ -1,5 +1,4 @@
 import pandas as pd                               
-from dotenv import load_dotenv
 import os
 from sqlalchemy import create_engine, MetaData
 from joblib import load
@@ -8,13 +7,16 @@ from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
-load_dotenv()
+### Uncomment when NOT using Docker
+##from dotenv import load_dotenv
+##load_dotenv()
+
 SERVER = os.environ.get('SERVER')
 DATABASE = os.environ.get('DATAWAREHOUSE')
 UID = os.environ.get('USER') 
 PWD = os.environ.get('PASSWORD')
 
-connection_string = f'mssql+pyodbc://{UID}:{PWD}@ssh-tunnel/{DATABASE}?driver=ODBC+Driver+17+for+SQL+Server'
+connection_string = f'mssql+pyodbc://{UID}:{PWD}@{SERVER}/{DATABASE}?driver=ODBC+Driver+17+for+SQL+Server'
 engine = create_engine(connection_string)
 
 metadata = MetaData()
@@ -176,8 +178,5 @@ async def generate_contacts(campagne_id: str,  amount: int):
 
 if __name__ == "__main__":
     print(generate_contact_list("EC55159E-109A-EC11-B400-0022488005A7", 15))
-
-
-    
 
 

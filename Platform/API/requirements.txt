@@ -1,4 +1,6 @@
 fastapi[all]
 pandas
 scikit_learn
+pyodbc
 SQLAlchemy
+

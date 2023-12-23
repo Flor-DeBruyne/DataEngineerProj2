@@ -12,7 +12,7 @@ local_port = 1438
 remote_host = 'localhost'
 remote_port = 1433
 
-## Create
+## Create SSH tunnel
 with SSHTunnelForwarder(
     (ssh_host, ssh_port),
     ssh_username=ssh_username,
@@ -24,7 +24,7 @@ with SSHTunnelForwarder(
 
     try:
         while True:
-            time.sleep(100)
+            time.sleep(500)
     except KeyboardInterrupt:
         pass
 
