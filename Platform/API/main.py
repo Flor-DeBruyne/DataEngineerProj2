@@ -1,12 +1,7 @@
 from fastapi import FastAPI
+from routers import epic4, result_lists
 
 app = FastAPI()
-
-## Defining API paths
-root_path = '/'
-epic3_path = '/epic3/{contact_id}'
-epic4_path = '/epic4/{contact_id}'
-epic5_path = '/epic5/{campagne_id}'
 
 ## Defining requests handlers
 @app.get('/')
@@ -15,23 +10,5 @@ async def root():
         'Status' : 'Operational'
     }
 
-@app.get(epic3_path)
-async def handle_epic3(contact_id: str):
-    return {
-        'result' : 'TO_DO',
-        'param': contact_id
-    }
-
-@app.get(epic4_path)
-async def handle_epic4(contact_id: str):
-    return {
-        'result' : 'TO_DO',
-        'param': contact_id
-    }
-
-@app.get(epic5_path)
-async def handle_epic5(campagne_id: str):
-    return {
-        'result' : 'TO_DO',
-        'param': campagne_id
-    }
+app.include_router(result_lists.router)
+app.include_router(epic4.router)
