@@ -12,18 +12,19 @@ import Epic5Page from './components/Epic5page.jsx';
 
 function App() {
   return (
-    <div className='flex fill-current'>
-      <Navigation/>
-    <Router>
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/epic3" element={<Epic3Page />} />
-      <Route path="/epic4" element={<Epic4Page />} />
-      <Route path="/epic5" element={<Epic5Page />} />
-    </Routes>
-  </Router>
-  
-  </div>
+    <div className='flex flex-col h-screen'>
+      <Navigation />
+      <div className="flex-grow">
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/epic3" element={<Epic3Page />} />
+            <Route path="/epic4" element={<Epic4Page />} />
+            <Route path="/epic5" element={<Epic5Page />} />
+          </Routes>
+        </Router>
+      </div>
+    </div>
   );
 }
 

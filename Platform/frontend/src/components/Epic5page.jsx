@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import DatePicker from './DatePicker';
 import Dropdown from './Dropdown';
 
 const Epic5Page = () => {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [amount, setAmount] = useState(10);
+  const [amount, setAmount] = useState(1);
   const [dropdownOptions, setDropdownOptions] = useState([]);
-  const [apiResult, setApiResult] = useState(null);
+  const [apiResult, setApiResult] = useState({
+    result: [
+      { Contact_ID: '', Email_Count: '', probas: '' },
+    ],
+  });
 
   useEffect(() => {
     fetchDropdownOptions();
@@ -63,31 +66,50 @@ const Epic5Page = () => {
   };
 
   return (
-    <div>
-
+    <div className="container mx-auto p-4">
       <Dropdown
-        className="border-black border-t-2"
+        className="border-black border-t-2 mb-4"
         options={dropdownOptions}
         selectedOption={selectedOption}
         onChange={handleDropdownChange}
       />
 
       <input
-        className="border-black border-t-2"
+        className="border-black border-t-2 mb-4 p-2"
         type="number"
         value={amount}
         onChange={handleAmountChange}
         placeholder="Enter amount"
       />
 
-      <button onClick={handleSubmit}>Submit</button>
+      <button
+        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+        onClick={handleSubmit}
+      >
+        Submit
+      </button>
 
       {apiResult && (
-        <div>
-          <h2>API Result</h2>
-          {/* Display result in a table or field */}
-          {/* Modify this based on the structure of your API response */}
-          <pre>{JSON.stringify(apiResult, "Geen Contacten")}</pre>
+        <div className="mt-8">
+          <h2 className="text-lg font-bold mb-4">API Result</h2>
+          <table className="table-auto w-full">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Contact ID</th>
+                <th className="px-4 py-2">Weekly email count</th>
+                <th className="px-4 py-2">Probability</th>
+              </tr>
+            </thead>
+            <tbody>
+              {apiResult.result.map((row, index) => (
+                <tr key={index}>
+                  <td className="border px-4 py-2">{row.Contact_ID}</td>
+                  <td className="border px-4 py-2">{row.Email_Count}</td>
+                  <td className="border px-4 py-2">{row.probas}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

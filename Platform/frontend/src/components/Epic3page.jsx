@@ -3,11 +3,15 @@ import DatePicker from './DatePicker';
 import Dropdown from './Dropdown';
 
 const Epic3Page = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date('2020-01-01'));
   const [selectedOption, setSelectedOption] = useState(null);
-  const [amount, setAmount] = useState(10);
+  const [amount, setAmount] = useState(1);
   const [dropdownOptions, setDropdownOptions] = useState([]);
-  const [apiResult, setApiResult] = useState(null);
+  const [apiResult, setApiResult] = useState({
+    result: [
+      { campaign: '', probas: '' },
+    ],
+  });
 
   useEffect(() => {
     fetchDropdownOptions();
@@ -67,41 +71,60 @@ const Epic3Page = () => {
     }
   };
 
-  return (
-    <div>
-      <DatePicker
-        className="border-black border-t-2"
-        selectedDate={selectedDate}
-        onChange={handleDateChange}
-      />
-
-      <Dropdown
-        className="border-black border-t-2"
-        options={dropdownOptions}
-        selectedOption={selectedOption}
-        onChange={handleDropdownChange}
-      />
-
-      <input
-        className="border-black border-t-2"
-        type="number"
-        value={amount}
-        onChange={handleAmountChange}
-        placeholder="Enter amount"
-      />
-
-      <button onClick={handleSubmit}>Submit</button>
-
-      {apiResult && (
-        <div>
-          <h2>API Result</h2>
-          {/* Display result in a table or field */}
-          {/* Modify this based on the structure of your API response */}
-          <pre>{JSON.stringify(apiResult, "Geen Campagnes")}</pre>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Epic3Page;
+    return (
+      <div className="container mx-auto p-4">
+        <DatePicker
+          inplace="2023-01-01"
+          className="border-black border-t-2 mb-4"
+          selectedDate={selectedDate}
+          onChange={handleDateChange}
+        />
+  
+        <Dropdown
+          className="border-black border-t-2 mb-4"
+          options={dropdownOptions}
+          selectedOption={selectedOption}
+          onChange={handleDropdownChange}
+        />
+  
+        <input
+          className="border-black border-t-2 mb-4 p-2"
+          type="number"
+          value={amount}
+          onChange={handleAmountChange}
+          placeholder="Enter amount"
+        />
+  
+        <button
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
+  
+        {apiResult && (
+          <div className="mt-8">
+            <h2 className="text-lg font-bold mb-4">API Result</h2>
+            <table className="table-auto w-full">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2">Campaign</th>
+                  <th className="px-4 py-2">Probability</th>
+                </tr>
+              </thead>
+              <tbody>
+                {apiResult.result.map((row, index) => (
+                  <tr key={index}>
+                    <td className="border px-4 py-2">{row.campaign}</td>
+                    <td className="border px-4 py-2">{row.probas}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
+  };
+  
+  export default Epic3Page;  
