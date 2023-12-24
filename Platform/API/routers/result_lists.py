@@ -3,7 +3,7 @@ import os
 from sqlalchemy import create_engine, MetaData
 from joblib import load
 import datetime
-from fastapi import HTTPException, APIRouter
+from fastapi import HTTPException, APIRouter, Query
 
 router = APIRouter()
 
@@ -87,6 +87,8 @@ df_input["Duration"] = df_input["End_date_campagne"] - df_input["Start_date_camp
 df_input["Duration"] = df_input["Duration"] + datetime.timedelta(days=1)
 df_input["Facturatie_bedrag"] = df_input["Facturatie_bedrag"].str.replace(",", ".").astype(float)
 
+rfc = load("/app/Analyse/campagne_rfc.joblib")
+
 def mailing_pressure(df_mail= df_mail):
     df_mail['Mailing_Sent_On'] = pd.to_datetime(df_mail['Mailing_Sent_On'], dayfirst=True)
 
@@ -100,11 +102,16 @@ def mailing_pressure(df_mail= df_mail):
 
     return email_counts
 
+def get_contact_list(df_input= df_input):
+    df_input = df_input.drop_duplicates(["Contact_ID"]).copy()
+    return df_input["Contact_ID"]
+
+def get_campagne_list(df_input= df_input):
+    df_input = df_input.drop_duplicates(["Campagne_ID"])
+    return df_input["Campagne_ID"]
 
 
-def generate_campagne_list(contact_id, after_date, amount: int, df_input = df_input):
-
-    rfc = load("../../Analyse/campagne_rfc.joblib")
+def generate_campagne_list(contact_id, after_date, amount: int, df_input = df_input, rfc= rfc):
 
     df_input = df_input[df_input["Start_date_campagne"] > after_date]
     df_input = df_input[df_input["Contact_ID"] == contact_id]
@@ -122,12 +129,8 @@ def generate_campagne_list(contact_id, after_date, amount: int, df_input = df_in
     return campagnes_sorted[:amount]
 
 
-
-
-def generate_contact_list(campagne_id, amount: int, df_input = df_input):
+def generate_contact_list(campagne_id, amount: int, df_input = df_input, rfc= rfc):
     
-    rfc = load("../../Analyse/campagne_rfc.joblib")
-
     df_input = df_input[df_input["Campagne_ID"] == campagne_id]
     df_input = df_input.drop_duplicates(["Contact_ID"])
 
@@ -145,10 +148,32 @@ def generate_contact_list(campagne_id, amount: int, df_input = df_input):
 
     return contacts_sorted[['Contact_ID', 'Email_Count', 'probas']][:amount]
 
-@router.get('/generate_campagnes/{contact_id}')
-async def generate_campagnes(contact_id: str, after_date: str, amount: int):
+@router.get('/get_contacts/')
+async def get_contacts():
     try:
-        after_date = datetime.datetime.strftime(after_date, "%Y-%m-%d")
+        result = get_contact_list()
+        return {'result': result.to_dict()}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get('/get_campagnes/')
+async def get_campagnes():
+    try:
+        result = get_campagne_list()
+        return {'result': result.to_dict()}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get('/generate_campagnes/{contact_id}')
+async def generate_campagnes(contact_id: str,
+                             after_date: str = Query("2023-01-01", description="Campage after this date", ge="2010-01-01"),
+                             amount: int = Query(10, description="Number of contacts to generate", ge=1)):
+    try:
+        # WERKT NIET MET STRING DATE -> aanpassen achter frontend
+        # after_date = datetime.datetime.strftime(after_date, "%Y-%m-%d")
 
         result = generate_campagne_list(contact_id, after_date, amount)
 
@@ -159,7 +184,8 @@ async def generate_campagnes(contact_id: str, after_date: str, amount: int):
     
 
 @router.get('/generate_contacts/{campagne_id}')
-async def generate_contacts(campagne_id: str,  amount: int):
+async def generate_contacts(campagne_id: str,
+                            amount: int = Query(10, description="Number of contacts to generate", ge=1)):
     try:
         result = generate_contact_list(campagne_id, amount)
 
@@ -169,8 +195,5 @@ async def generate_contacts(campagne_id: str,  amount: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-
-#if __name__ == "__main__":
-#    print(generate_contact_list("EC55159E-109A-EC11-B400-0022488005A7", 15))
 
 
