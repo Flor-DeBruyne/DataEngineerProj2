@@ -19,4 +19,15 @@ services:
       - ssh-tunnel
     ports:
       - "8000:8000"
+      
+  frontend:
+    build:
+       context: ./frontend
+    container_name: platform-frontend-1
+    depends_on: 
+      - api
+    ports:
+      - "3000:3000"
+
+
 
