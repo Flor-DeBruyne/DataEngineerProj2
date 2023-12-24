@@ -11,7 +11,7 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-def find_lookalikes(contact_id) :    
+def find_lookalikes(contact_id) :
     ## DW connection
     SERVER = os.environ.get('SERVER')
     DATABASE = os.environ.get('DATAWAREHOUSE')
@@ -25,7 +25,12 @@ def find_lookalikes(contact_id) :
     contacts = pd.read_sql_table('DimContact', conn)
     accounts = pd.read_sql_table('DimCustomer', conn)
     conn.close()
-    
+
+    ## Determining contacts with high number of transactions
+    participation_counts = contacts.groupby('Contact_ID')['Inschrijving_ID'].count().reset_index()
+    avg_participation = participation_counts['Inschrijving_ID'].mean()
+    high_transaction_contacts = participation_counts[participation_counts['Inschrijving_ID'] >= avg_participation]['Contact_ID']
+
     ## Data manipulation
     contacts = contacts.merge(accounts, how='left', left_on='Account_ID', right_on='Customer_ID')
     contacts = contacts.sort_values(['Contact_ID', 'Contact_status'])    
@@ -33,7 +38,7 @@ def find_lookalikes(contact_id) :
 
     ## Encoding labels
     encoded_features = ['Account_encoded', 'Titel_encoded', 'Voka_employee_encoded', 'Regio_encoded', 'Subregio_encoded', 'Company_kind_encoded', 'Company_type_encoded', 'Primary_activity_encoded']
-
+    
     account_encoder = LabelEncoder()
     title_encoder = LabelEncoder()
     voka_encoder = LabelEncoder()
@@ -51,22 +56,17 @@ def find_lookalikes(contact_id) :
     contacts['Company_kind_encoded'] = company_kind_encoder.fit_transform(contacts['Ondernemingsaard'])
     contacts['Company_type_encoded'] = company_type_encoder.fit_transform(contacts['Ondernemingstype'])
     contacts['Primary_activity_encoded'] = primary_activity_encoder.fit_transform(contacts['Primaire_activiteit'])
-
-    ## Calculating cosine similarity
+    
+    ## Retrieving contact and high transaction contacts
     contact = contacts[contacts['Contact_ID'] == contact_id]
     contacts = contacts[contacts['Contact_ID'] != contact_id]
-    
+    contacts = contacts[contacts['Contact_ID'].isin(high_transaction_contacts)] # Only keep the high transaction contacts
+
+    ## Calculating cosine similarity    
     similarity_matrix = cosine_similarity(contact[encoded_features], contacts[encoded_features])
     contacts['similarity'] = similarity_matrix[0]
 
     ## Returning result
-    participation_counts = contacts.groupby('Contact_ID')['Inschrijving_ID'].count().reset_index()
-    avg_participation = participation_counts['Inschrijving_ID'].mean()
-    high_transaction_contacts = participation_counts[participation_counts['Inschrijving_ID'] >= avg_participation]['Contact_ID']
-    contacts = contacts[contacts['Contact_ID'].isin(high_transaction_contacts)] # Only keep the high transaction contacts
-
-    print(f"Average is {avg_participation}")
-
     contacts = contacts.sort_values(by = 'similarity', ascending = False)    
     contacts = contacts[['Contact_ID', 'similarity']]
     contacts_list = contacts.values.tolist()
