@@ -31,7 +31,7 @@ const Epic3Page = () => {
 
   const fetchDropdownOptions = async () => {
     try {
-      const response = await fetch('http://0.0.0.0:8000/get_contacts/');
+      const response = await fetch('http://localhost:8000/get_contacts/');
       const data = await response.json();
   
       if (response.ok) {
@@ -51,8 +51,8 @@ const Epic3Page = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log(`http://0.0.0.0:8000/generate_campagnes/${selectedOption.label}?after_date=${selectedDate.toISOString().slice(0, 10)}&amount=${amount}`)
-      const response = await fetch(`http://0.0.0.0:8000/generate_campagnes/${selectedOption.label}?after_date=${selectedDate.toISOString().slice(0, 10)}&amount=${amount}`, {
+      console.log(`http://localhost:8000/generate_campagnes/${selectedOption.label}?after_date=${selectedDate.toISOString().slice(0, 10)}&amount=${amount}`)
+      const response = await fetch(`http://localhost:8000/generate_campagnes/${selectedOption.label}?after_date=${selectedDate.toISOString().slice(0, 10)}&amount=${amount}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

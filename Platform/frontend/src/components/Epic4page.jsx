@@ -20,7 +20,7 @@ const Epic4Page = () => {
 
   const fetchDropdownOptions = async () => {
     try {
-      const response = await fetch('http://0.0.0.0:8000/get_contacts/');
+      const response = await fetch('http://localhost:8000/get_contacts/');
       const data = await response.json();
   
       if (response.ok) {
@@ -40,8 +40,8 @@ const Epic4Page = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log(`http://0.0.0.0:8000/lookalikes/${selectedOption.label}`)
-      const response = await fetch(`http://0.0.0.0:8000/lookalikes/${selectedOption.label}`, {
+      console.log(`http://localhost:8000/lookalikes/${selectedOption.label}`)
+      const response = await fetch(`http://localhost:8000/lookalikes/${selectedOption.label}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

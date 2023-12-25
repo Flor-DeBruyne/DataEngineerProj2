@@ -25,7 +25,7 @@ const Epic5Page = () => {
 
   const fetchDropdownOptions = async () => {
     try {
-      const response = await fetch('http://0.0.0.0:8000/get_campagnes/');
+      const response = await fetch('http://localhost:8000/get_campagnes/');
       const data = await response.json();
   
       if (response.ok) {
@@ -45,8 +45,8 @@ const Epic5Page = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log(`http://0.0.0.0:8000/generate_contacts/${selectedOption.label}?&amount=${amount}`)
-      const response = await fetch(`http://0.0.0.0:8000/generate_contacts/${selectedOption.label}?&amount=${amount}`, {
+      console.log(`http://localhost:8000/generate_contacts/${selectedOption.label}?&amount=${amount}`)
+      const response = await fetch(`http://localhost:8000/generate_contacts/${selectedOption.label}?&amount=${amount}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
