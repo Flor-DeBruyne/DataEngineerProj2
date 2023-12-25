@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from './Dropdown';
+import { Link } from 'react-router-dom';
 
-const Epic4Page = () => {
+const Epic4Page_1 = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [dropdownOptions, setDropdownOptions] = useState([]);
   const [apiResult, setApiResult] = useState({
@@ -62,6 +63,10 @@ const Epic4Page = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <nav className="flex space-x-4 mb-4">
+        <Link to="/epic4/lookalikes" className="text-blue-500 hover:underline">Lookalikes</Link>
+        <Link to="/epic4/clusters" className="text-blue-500 hover:underline">Clusters</Link>
+      </nav>
       <Dropdown
         className="border-black border-t-2 mb-4"
         options={dropdownOptions}
@@ -101,4 +106,4 @@ const Epic4Page = () => {
   );
 };
 
-export default Epic4Page;
+export default Epic4Page_1;

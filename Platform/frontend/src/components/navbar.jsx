@@ -32,7 +32,7 @@ export default function Navbar({ fixed }) {
               </li>
               <li className="nav-item">
                 <a
-                  href="/epic4"
+                  href="/epic4/lookalikes"
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                 >
                   Epic 4
